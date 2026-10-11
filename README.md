@@ -30,8 +30,10 @@ Tests: `cd backend && .venv/bin/python -m pytest`
 **Backend → Render** (free tier). [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/DeveloperVishal004/Accounts-Payable-Agent-Sarvam-)
 The blueprint is in `render.yaml`. Paste `SARVAM_API_KEY` when Render asks for it; it is stored only in Render. On startup the instance seeds the demo ERP and preloads the real Sarvam results for the sample invoices (`backend/seed/sarvam_cache.json`), so the **"Load 8 demo invoices"** button uses no credits.
 
-**Frontend → Vercel**: set the root directory to `frontend` and the env var `NEXT_PUBLIC_API=https://hisaab-ap-api.onrender.com`.
-Any `*.vercel.app` origin is allowed by CORS by default. For other domains, add them to `CORS_ORIGINS` on Render.
+**Frontend → GitHub Pages**: deployed automatically by `.github/workflows/pages.yml` on every push to `main`
+(live at https://developervishal004.github.io/Accounts-Payable-Agent-Sarvam-/). It calls the backend at
+`https://hisaab-ap-api.onrender.com`; to use a different URL, set a repository variable named `NEXT_PUBLIC_API`.
+CORS allows the Pages origin and `*.vercel.app`. Add any other domain to `CORS_ORIGINS` on Render.
 
 > Free Render instances sleep when idle (the first request takes ~30-60 s) and have no persistent disk. Each restart starts a fresh demo, and the usage budget applies per instance.
 

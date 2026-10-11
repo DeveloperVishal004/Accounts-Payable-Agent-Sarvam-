@@ -10,3 +10,4 @@ frontend/.next/
 .pytest_cache/
 backend/*.egg-info/
 Idea Library.pdf
+frontend/out/

@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     prebuilt_cache: Path = BASE_DIR / "seed" / "sarvam_cache.json"
 
     # Hosting
-    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+    cors_origins: str = "https://developervishal004.github.io,http://localhost:3000,http://127.0.0.1:3000"
     cors_origin_regex: str = r"https://.*\.vercel\.app"
 
     # Buyer (our company)

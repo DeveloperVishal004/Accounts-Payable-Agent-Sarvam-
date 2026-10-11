@@ -151,7 +151,7 @@ export default function Dashboard() {
                 {rows.map((r) => (
                   <tr key={r.id} className="hover:bg-slate-50">
                     <td className="px-4 py-2.5">
-                      <Link href={`/invoices/${r.id}`} className="font-medium text-indigo-700 hover:underline">
+                      <Link href={`/invoice/?id=${r.id}`} className="font-medium text-indigo-700 hover:underline">
                         {r.vendor_name ?? r.file_name}
                       </Link>
                       <div className="text-xs text-slate-500">
@@ -315,7 +315,7 @@ function LiveRow({ l }: { l: Live }) {
   const errored = Object.values(last).find((e) => e.status === "error");
   return (
     <div className="flex flex-wrap items-center gap-3 px-4 py-3">
-      <Link href={`/invoices/${l.id}`} className="w-64 truncate text-sm font-medium text-indigo-700 hover:underline">
+      <Link href={`/invoice/?id=${l.id}`} className="w-64 truncate text-sm font-medium text-indigo-700 hover:underline">
         {l.name}
       </Link>
       <div className="flex flex-1 flex-wrap items-center gap-1.5">

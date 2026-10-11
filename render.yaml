@@ -20,4 +20,4 @@ services:
       - key: SARVAM_PAGE_BUDGET
         value: "40"
       - key: CORS_ORIGINS
-        value: http://localhost:3000
+        value: https://developervishal004.github.io,http://localhost:3000

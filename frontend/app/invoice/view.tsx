@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { use, useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { SeverityPill, sevBox, StatusBadge } from "@/components/ui";
 import { API, api, inr, InvoiceDetail, LANG, post, PROCESSING } from "@/lib/api";
 
@@ -35,8 +36,8 @@ const LINE_STATUS: Record<string, string> = {
   unmatched: "bg-slate-200 text-slate-700",
 };
 
-export default function InvoicePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function InvoiceView() {
+  const id = useSearchParams().get("id") ?? "";
   const [d, setD] = useState<InvoiceDetail | null>(null);
   const [edits, setEdits] = useState<Record<string, string>>({});
   const [comment, setComment] = useState("");
@@ -46,7 +47,15 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
   const [emailLang, setEmailLang] = useState<string>("");
   const [showOcr, setShowOcr] = useState(false);
 
-  const load = useCallback(async () => setD(await api<InvoiceDetail>(`/invoices/${id}`)), [id]);
+  const [loadErr, setLoadErr] = useState<string | null>(null);
+  const load = useCallback(async () => {
+    try {
+      setD(await api<InvoiceDetail>(`/invoices/${id}`));
+      setLoadErr(null);
+    } catch (e) {
+      setLoadErr((e as Error).message);
+    }
+  }, [id]);
 
   useEffect(() => {
     load();
@@ -76,7 +85,7 @@ export default function InvoicePage({ params }: { params: Promise<{ id: string }
     }
   };
 
-  if (!d) return <div className="text-slate-500">Loading…</div>;
+  if (!d) return <div className="text-slate-500">{loadErr ? `Could not load invoice ${id}: ${loadErr}` : "Loading… (the free backend may take ~30-60 s to wake up)"}</div>;
   const inv = d.invoice;
   const conf = inv.confidence ?? {};
   const decision = inv.decision;
