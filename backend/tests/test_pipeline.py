@@ -72,3 +72,22 @@ def test_fix_field_then_approve_and_pay(client):
     assert run["count"] == 3
     stats = client.get("/dashboard/stats").json()
     assert stats["money_saved"] > 0 and stats["usage"]["tokens_used"] == 0
+
+
+def test_real_world_invoice_unknown_vendor_to_payment(client):
+    """A real upload from a supplier we've never seen: onboard vendor → retro PO → approved."""
+    from app.utils.gst import make_gstin
+
+    inv = next(i for i in client.get("/invoices").json() if i["file_name"].startswith("07_"))
+    new_gstin = make_gstin("27", "AAKCN4455R")
+    d = client.patch(f"/invoices/{inv['id']}/fields", json={"fields": {"vendor_name": "Navkar Traders", "vendor_gstin": new_gstin, "po_number": "VERBAL-ORDER"}}).json()
+    codes = {i["code"] for i in d["issues"]}
+    assert d["invoice"]["status"] == "ON_HOLD" and {"UNKNOWN_VENDOR", "NO_PO"} <= codes
+
+    assert client.post(f"/invoices/{inv['id']}/retro-po", json={}).status_code == 400  # vendor first
+    d = client.post(f"/invoices/{inv['id']}/onboard-vendor", json={"actor": "ap.clerk"}).json()
+    assert "UNKNOWN_VENDOR" not in {i["code"] for i in d["issues"]} and d["vendor"]["gstin"] == new_gstin
+
+    d = client.post(f"/invoices/{inv['id']}/retro-po", json={"actor": "ap.clerk"}).json()
+    assert d["invoice"]["po_number"].startswith("PO-RETRO-")
+    assert d["invoice"]["status"] == "SCHEDULED", [i["code"] for i in d["issues"]]

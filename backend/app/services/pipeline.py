@@ -283,3 +283,74 @@ def correct_fields(s: Session, inv: Invoice, fields: dict, actor: str) -> None:
     apply_extracted(s, inv, ex)
     audit(s, inv.id, "fields_corrected", actor=actor, before=before, after=fields)
     evaluate(s, inv, ex)
+
+
+# ---------------------------------------------------------------- onboarding real-world invoices
+
+
+def _extracted(inv: Invoice) -> ExtractedInvoice:
+    if not inv.extracted:
+        raise WorkflowError("Invoice has no extracted data yet.")
+    return ExtractedInvoice.model_validate(inv.extracted)
+
+
+def onboard_vendor(s: Session, inv: Invoice, actor: str) -> None:
+    """Add the invoice's supplier to the vendor master (after a human confirms), then re-check."""
+    from app.models import Vendor
+    from app.utils.gst import gstin_valid
+
+    ex = _extracted(inv)
+    if inv.vendor_id:
+        raise WorkflowError("Vendor is already in the master.")
+    if not ex.vendor_gstin or not gstin_valid(ex.vendor_gstin):
+        raise WorkflowError("A valid supplier GSTIN is needed to onboard a vendor. Correct the GSTIN field first.")
+    if s.exec(select(Vendor).where(Vendor.gstin == ex.vendor_gstin)).first():
+        raise WorkflowError("A vendor with this GSTIN already exists.")
+    vendor = Vendor(
+        name=ex.vendor_name or ex.vendor_gstin,
+        gstin=ex.vendor_gstin,
+        state_code=ex.vendor_gstin[:2],
+        pan=ex.vendor_gstin[2:12],
+        bank_account=ex.bank_account or "",
+        ifsc=ex.ifsc or "",
+        payment_terms_days=30,
+        preferred_language=ex.language if ex.language and "-" in ex.language else "en-IN",
+    )
+    s.add(vendor)
+    s.flush()
+    audit(s, inv.id, "vendor_onboarded", actor=actor, vendor_id=vendor.id, gstin=vendor.gstin)
+    evaluate(s, inv, ex)
+
+
+def create_retro_po(s: Session, inv: Invoice, actor: str) -> None:
+    """Raise a retrospective PO + GRN mirroring the invoice lines (a human attests the goods arrived), then re-check."""
+    from app.models import GoodsReceipt, GRNLine, POLine, PurchaseOrder
+
+    ex = _extracted(inv)
+    if not inv.vendor_id:
+        raise WorkflowError("Onboard the vendor first.")
+    if inv.po_id:
+        raise WorkflowError(f"Invoice is already matched to {inv.po_number}.")
+    if not ex.line_items:
+        raise WorkflowError("No line items to build a PO from.")
+    n = len(s.exec(select(PurchaseOrder)).all()) + 1
+    po_number = f"PO-RETRO-{n:04d}"
+    po = PurchaseOrder(
+        po_number=po_number, vendor_id=inv.vendor_id, po_date=ex.invoice_date or date.today(),
+        total=ex.total or 0.0, status="OPEN",
+    )
+    s.add(po)
+    s.flush()
+    grn = GoodsReceipt(grn_number=f"GRN-RETRO-{n:04d}", po_id=po.id, received_date=date.today())
+    s.add(grn)
+    s.flush()
+    for i, line in enumerate(ex.line_items, start=1):
+        s.add(POLine(po_id=po.id, line_no=i, description=line.description, hsn=line.hsn or "", qty=line.qty,
+                     unit_price=line.unit_price, tax_rate=line.tax_rate or 0.0))
+        s.add(GRNLine(grn_id=grn.id, po_line_no=i, qty_received=line.qty))
+    ex.po_number = po_number
+    inv.po_number = po_number
+    inv.extracted = {**ex.model_dump(mode="json")}
+    s.flush()
+    audit(s, inv.id, "retro_po_raised", actor=actor, po_number=po_number, grn=grn.grn_number)
+    evaluate(s, inv, ex)

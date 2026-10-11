@@ -163,6 +163,16 @@ def hold(invoice_id: int, body: ActionIn, s: Session = Depends(get_session)):
     return _action(pipeline.hold, invoice_id, body, s)
 
 
+@router.post("/{invoice_id}/onboard-vendor")
+def onboard_vendor(invoice_id: int, body: ActionIn, s: Session = Depends(get_session)):
+    return _action(lambda s_, inv, actor, _c: pipeline.onboard_vendor(s_, inv, actor), invoice_id, body, s)
+
+
+@router.post("/{invoice_id}/retro-po")
+def retro_po(invoice_id: int, body: ActionIn, s: Session = Depends(get_session)):
+    return _action(lambda s_, inv, actor, _c: pipeline.create_retro_po(s_, inv, actor), invoice_id, body, s)
+
+
 @router.post("/{invoice_id}/reprocess")
 def reprocess(invoice_id: int, background: BackgroundTasks, s: Session = Depends(get_session)):
     """Re-run the pipeline. Uses the per-file cache, so no Sarvam credits are spent twice."""

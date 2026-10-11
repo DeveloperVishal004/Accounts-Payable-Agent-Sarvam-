@@ -268,8 +268,8 @@ function Uploader({ onUploaded }: { onUploaded: (c: { id: number; file_name: str
     >
       <input ref={input} type="file" multiple accept=".pdf,.png,.jpg,.jpeg" className="hidden" onChange={(e) => send(e.target.files)} />
       <div className="text-4xl">🧾</div>
-      <div className="mt-2 text-lg font-semibold">{busy ? "Uploading…" : "Drop invoices here"}</div>
-      <div className="mt-1 text-sm text-slate-500">PDF, scans or phone photos in English, हिन्दी, தமிழ் and more. The agent reads, checks, matches and routes each one.</div>
+      <div className="mt-2 text-lg font-semibold">{busy ? "Uploading…" : "Upload your invoices"}</div>
+      <div className="mt-1 text-sm text-slate-500">Drag & drop or click to choose a PDF, scan or phone photo (up to 10 files, max 10 pages each) in English, हिन्दी, தமிழ் and more. Each one is read live by Sarvam, then checked, matched and routed.</div>
       {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
       <div className="mt-4 flex flex-wrap justify-center gap-2" onClick={(e) => e.stopPropagation()}>
         <button

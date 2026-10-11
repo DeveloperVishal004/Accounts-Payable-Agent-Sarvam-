@@ -94,6 +94,7 @@ export default function InvoiceView() {
   const pendingStep = d.approvals.find((a) => a.status === "PENDING");
   const editable = ["ON_HOLD", "PENDING_APPROVAL"].includes(inv.status);
   const realIssues = d.issues.filter((i) => i.severity !== "info");
+  const codes = new Set(d.issues.map((i) => i.code));
 
   const saveEdits = () =>
     act(
@@ -219,6 +220,37 @@ export default function InvoiceView() {
                 {email && <pre className="mt-3 whitespace-pre-wrap rounded-lg bg-white p-3 text-sm leading-relaxed">{email}</pre>}
               </div>
             )
+          )}
+
+          {/* Real-world uploads: unknown supplier / no PO in our ERP */}
+          {editable && (codes.has("UNKNOWN_VENDOR") || codes.has("NO_PO")) && (
+            <div className="card border-indigo-200 p-4">
+              <div className="text-sm font-semibold">New supplier or unplanned purchase?</div>
+              <p className="mt-1 text-sm text-slate-600">
+                {codes.has("UNKNOWN_VENDOR")
+                  ? "This supplier isn't in the vendor master yet. After checking the GSTIN and bank details read from the invoice, onboard them in one click."
+                  : "No purchase order covers this invoice. If the goods or services were received, raise a retrospective PO and GRN from the invoice lines."}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {codes.has("UNKNOWN_VENDOR") ? (
+                  <button
+                    onClick={() => act("onboard", () => post(`/invoices/${id}/onboard-vendor`, { actor: "you" }), "Vendor onboarded. Checks were re-run.")}
+                    disabled={!!busy}
+                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+                  >
+                    ➕ Onboard vendor from invoice
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => act("retro", () => post(`/invoices/${id}/retro-po`, { actor: "you" }), "Retro PO and GRN raised. Checks were re-run.")}
+                    disabled={!!busy}
+                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+                  >
+                    📄 Raise retro PO + GRN (goods received)
+                  </button>
+                )}
+              </div>
+            </div>
           )}
 
           {/* Actions */}
