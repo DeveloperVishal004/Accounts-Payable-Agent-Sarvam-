@@ -1,0 +1,48 @@
+{
+  "markdown": "# Shree Ganesh Packaging\nGSTIN 27AAPFS7788Q1ZP\nInvoice SGP-0934 dated 2026-10-09\n| Bubble Wrap Roll 1m x 100m | 40 | 450.0 | 18000.0 |\nTotal 21240.0",
+  "extracted": {
+    "vendor_name": "Shree Ganesh Packaging",
+    "vendor_gstin": "27AAPFS7788Q1ZP",
+    "vendor_address": "Gala 7, Bhiwandi Industrial Estate, Thane 421302",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "SGP-0934",
+    "invoice_date": "2026-10-09",
+    "po_number": "PO-2026-0106",
+    "line_items": [
+      {
+        "description": "Bubble Wrap Roll 1m x 100m",
+        "hsn": "3923",
+        "qty": 40,
+        "unit_price": 450.0,
+        "tax_rate": 18,
+        "amount": 18000.0
+      }
+    ],
+    "subtotal": 18000.0,
+    "cgst": 1620.0,
+    "sgst": 1620.0,
+    "igst": null,
+    "total": 21240.0,
+    "bank_account": "40123456789012",
+    "ifsc": "ICIC0009911",
+    "language": "en-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.97,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "cgst": 0.97,
+      "sgst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "ON_HOLD: BANK_CHANGE",
+  "story": "Invoice asks for payment to a NEW bank account, a classic payment-fraud pattern."
+}

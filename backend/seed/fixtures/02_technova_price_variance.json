@@ -1,0 +1,55 @@
+{
+  "markdown": "# TechNova Electronics Pvt Ltd\nGSTIN 29AACCT5678L1ZK\nInvoice TN-INV-77815 dated 2026-10-06\n| Dell Latitude 5450 Laptop | 5 | 52000.0 | 260000.0 |\n| Dell 24 inch Monitor P2425 | 5 | 11880.0 | 59400.0 |\nTotal 376892.0",
+  "extracted": {
+    "vendor_name": "TechNova Electronics Pvt Ltd",
+    "vendor_gstin": "29AACCT5678L1ZK",
+    "vendor_address": "88, Electronic City Phase 1, Bengaluru 560100",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "TN-INV-77815",
+    "invoice_date": "2026-10-06",
+    "po_number": "PO-2026-0102",
+    "line_items": [
+      {
+        "description": "Dell Latitude 5450 Laptop",
+        "hsn": "8471",
+        "qty": 5,
+        "unit_price": 52000.0,
+        "tax_rate": 18,
+        "amount": 260000.0
+      },
+      {
+        "description": "Dell 24 inch Monitor P2425",
+        "hsn": "8528",
+        "qty": 5,
+        "unit_price": 11880.0,
+        "tax_rate": 18,
+        "amount": 59400.0
+      }
+    ],
+    "subtotal": 319400.0,
+    "cgst": null,
+    "sgst": null,
+    "igst": 57492.0,
+    "total": 376892.0,
+    "bank_account": "912010045678123",
+    "ifsc": "UTIB0000247",
+    "language": "en-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.97,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "igst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "ON_HOLD: PRICE_VARIANCE",
+  "story": "Monitor billed 8% above the PO price."
+}

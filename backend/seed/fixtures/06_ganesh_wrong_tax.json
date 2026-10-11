@@ -1,0 +1,47 @@
+{
+  "markdown": "# Shree Ganesh Packaging\nGSTIN 27AAPFS7788Q1ZP\nInvoice SGP-0921 dated 2026-10-08\n| 5-Ply Corrugated Box 18x12x12 | 1000 | 22.0 | 22000.0 |\nTotal 25960.0",
+  "extracted": {
+    "vendor_name": "Shree Ganesh Packaging",
+    "vendor_gstin": "27AAPFS7788Q1ZP",
+    "vendor_address": "Gala 7, Bhiwandi Industrial Estate, Thane 421302",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "SGP-0921",
+    "invoice_date": "2026-10-08",
+    "po_number": "PO-2026-0105",
+    "line_items": [
+      {
+        "description": "5-Ply Corrugated Box 18x12x12",
+        "hsn": "4819",
+        "qty": 1000,
+        "unit_price": 22.0,
+        "tax_rate": 18,
+        "amount": 22000.0
+      }
+    ],
+    "subtotal": 22000.0,
+    "cgst": null,
+    "sgst": null,
+    "igst": 3960.0,
+    "total": 25960.0,
+    "bank_account": "37281900012",
+    "ifsc": "MAHB0000412",
+    "language": "en-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.97,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "igst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "ON_HOLD: WRONG_TAX_TYPE",
+  "story": "Intra-state supply (both in Maharashtra), but IGST was charged."
+}

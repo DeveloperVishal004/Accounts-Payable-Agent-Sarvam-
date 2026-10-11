@@ -1,0 +1,47 @@
+{
+  "markdown": "# Kaveri Textiles\nGSTIN 33AAFFK9012M1Z9\nInvoice KT/1187 dated 2026-10-07\n| பருத்தி பாப்ளின் துணி 58\" (மீட்டர்) / Cotton Poplin Fabric | 500 | 180.0 | 90000.0 |\nTotal 94500.0",
+  "extracted": {
+    "vendor_name": "Kaveri Textiles",
+    "vendor_gstin": "33AAFFK9012M1Z9",
+    "vendor_address": "21, Avinashi Road, Coimbatore 641018",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "KT/1187",
+    "invoice_date": "2026-10-07",
+    "po_number": "PO-2026-0103",
+    "line_items": [
+      {
+        "description": "Cotton Poplin Fabric 58 inch (metre)",
+        "hsn": "5208",
+        "qty": 500,
+        "unit_price": 180.0,
+        "tax_rate": 5,
+        "amount": 90000.0
+      }
+    ],
+    "subtotal": 90000.0,
+    "cgst": null,
+    "sgst": null,
+    "igst": 4500.0,
+    "total": 94500.0,
+    "bank_account": "6123456789",
+    "ifsc": "IOBA0001580",
+    "language": "ta-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.97,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "igst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "ON_HOLD: QTY_EXCEEDS_RECEIVED",
+  "story": "Tamil-English invoice photo: billed 500 m, but the warehouse GRN shows only 400 m received."
+}

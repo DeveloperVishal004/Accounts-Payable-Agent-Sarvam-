@@ -1,0 +1,55 @@
+{
+  "markdown": "# Bharat Office Supplies\nGSTIN 07AAGFB4821K1ZH\nInvoice BOS/26-27/0412 dated 2026-10-05\n| A4 Copier Paper 75 GSM (Ream) | 50 | 280.0 | 14000.0 |\n| Heavy Duty Stapler | 10 | 150.0 | 1500.0 |\nTotal 18290.0",
+  "extracted": {
+    "vendor_name": "Bharat Office Supplies",
+    "vendor_gstin": "07AAGFB4821K1ZH",
+    "vendor_address": "14, Nehru Place, New Delhi 110019",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "BOS/26-27/0412",
+    "invoice_date": "2026-10-05",
+    "po_number": "PO-2026-0101",
+    "line_items": [
+      {
+        "description": "A4 Copier Paper 75 GSM (Ream)",
+        "hsn": "4802",
+        "qty": 50,
+        "unit_price": 280.0,
+        "tax_rate": 18,
+        "amount": 14000.0
+      },
+      {
+        "description": "Heavy Duty Stapler",
+        "hsn": "8472",
+        "qty": 10,
+        "unit_price": 150.0,
+        "tax_rate": 18,
+        "amount": 1500.0
+      }
+    ],
+    "subtotal": 15500.0,
+    "cgst": null,
+    "sgst": null,
+    "igst": 2790.0,
+    "total": 18290.0,
+    "bank_account": "50200012345678",
+    "ifsc": "HDFC0001234",
+    "language": "en-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.97,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "igst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "ON_HOLD: DUPLICATE",
+  "story": "Vendor re-sent invoice #1 by email. Same number, same amount."
+}

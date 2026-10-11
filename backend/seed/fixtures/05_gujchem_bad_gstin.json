@@ -1,0 +1,47 @@
+{
+  "markdown": "# Gujarat Chemicals Ltd\nGSTIN 24AABCG3456P1ZA\nInvoice GCL/2026/3391 dated 2026-10-03\n| Isopropyl Alcohol 99% (200L drum) | 4 | 9500.0 | 38000.0 |\nTotal 44840.0",
+  "extracted": {
+    "vendor_name": "Gujarat Chemicals Ltd",
+    "vendor_gstin": "24AABCG3456P1ZA",
+    "vendor_address": "Plot 45, GIDC Ankleshwar, Gujarat 393002",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "GCL/2026/3391",
+    "invoice_date": "2026-10-03",
+    "po_number": "PO-2026-0104",
+    "line_items": [
+      {
+        "description": "Isopropyl Alcohol 99% (200L drum)",
+        "hsn": "2905",
+        "qty": 4,
+        "unit_price": 9500.0,
+        "tax_rate": 18,
+        "amount": 38000.0
+      }
+    ],
+    "subtotal": 38000.0,
+    "cgst": null,
+    "sgst": null,
+    "igst": 6840.0,
+    "total": 44840.0,
+    "bank_account": "00981100004567",
+    "ifsc": "SBIN0000981",
+    "language": "en-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.97,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "igst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "ON_HOLD: INVALID_GSTIN",
+  "story": "GSTIN fails the checksum, so input tax credit would be lost."
+}

@@ -1,0 +1,47 @@
+{
+  "markdown": "# Bharat Office Supplies\nGSTIN 07AAGFB4821K1ZH\nInvoice BOS/26-27/0466 dated 2026-10-08\n| HP 88A टोनर कार्ट्रिज | 6 | 3200.0 | 19200.0 |\nTotal 22656.0",
+  "extracted": {
+    "vendor_name": "Bharat Office Supplies",
+    "vendor_gstin": "07AAGFB4821K1ZH",
+    "vendor_address": "14, Nehru Place, New Delhi 110019",
+    "buyer_gstin": "27AAACA1234A1ZK",
+    "invoice_number": "BOS/26-27/0466",
+    "invoice_date": "2026-10-08",
+    "po_number": "PO-2026-0107",
+    "line_items": [
+      {
+        "description": "HP 88A Toner Cartridge",
+        "hsn": "8443",
+        "qty": 6,
+        "unit_price": 3200.0,
+        "tax_rate": 18,
+        "amount": 19200.0
+      }
+    ],
+    "subtotal": 19200.0,
+    "cgst": null,
+    "sgst": null,
+    "igst": 3456.0,
+    "total": 22656.0,
+    "bank_account": "50200012345678",
+    "ifsc": "HDFC0001234",
+    "language": "hi-IN",
+    "confidence": {
+      "vendor_name": 0.97,
+      "vendor_gstin": 0.97,
+      "vendor_address": 0.97,
+      "buyer_gstin": 0.97,
+      "invoice_number": 0.97,
+      "invoice_date": 0.62,
+      "po_number": 0.97,
+      "subtotal": 0.97,
+      "igst": 0.97,
+      "total": 0.97,
+      "bank_account": 0.97,
+      "ifsc": 0.97,
+      "language": 0.97
+    }
+  },
+  "expect": "PENDING_APPROVAL: LOW_CONFIDENCE",
+  "story": "Hindi invoice, photographed at an angle. The handwritten date is read with low confidence, so it goes to a human."
+}
