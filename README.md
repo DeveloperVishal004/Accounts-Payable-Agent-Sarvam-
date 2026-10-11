@@ -25,6 +25,16 @@ Then open http://localhost:3000 and drag the files from `sample_invoices/` onto 
 Without an API key the backend runs **offline** from `backend/seed/fixtures/`, which is what the tests use.
 Tests: `cd backend && .venv/bin/python -m pytest`
 
+## Deploy
+
+**Backend → Render** (free tier). [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/DeveloperVishal004/Accounts-Payable-Agent-Sarvam-)
+The blueprint is in `render.yaml`. Paste `SARVAM_API_KEY` when Render asks for it; it is stored only in Render. On startup the instance seeds the demo ERP and preloads the real Sarvam results for the sample invoices (`backend/seed/sarvam_cache.json`), so the **"Load 8 demo invoices"** button uses no credits.
+
+**Frontend → Vercel**: set the root directory to `frontend` and the env var `NEXT_PUBLIC_API=https://hisaab-ap-api.onrender.com`.
+Any `*.vercel.app` origin is allowed by CORS by default. For other domains, add them to `CORS_ORIGINS` on Render.
+
+> Free Render instances sleep when idle (the first request takes ~30-60 s) and have no persistent disk. Each restart starts a fresh demo, and the usage budget applies per instance.
+
 ## Keeping API usage low (limited credits)
 
 | Guard | Where |

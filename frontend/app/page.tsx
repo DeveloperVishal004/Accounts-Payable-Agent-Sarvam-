@@ -40,7 +40,7 @@ export default function Dashboard() {
       setPayments(p);
       setErr(null);
     } catch (e) {
-      setErr(`Backend not reachable at ${API} (${(e as Error).message})`);
+      setErr(`Waking up the backend at ${API} (free tier sleeps when idle, so this takes ~30-60 s)… ${(e as Error).message}`);
     }
   }, [filter]);
 
@@ -271,6 +271,39 @@ function Uploader({ onUploaded }: { onUploaded: (c: { id: number; file_name: str
       <div className="mt-2 text-lg font-semibold">{busy ? "Uploading…" : "Drop invoices here"}</div>
       <div className="mt-1 text-sm text-slate-500">PDF, scans or phone photos in English, हिन्दी, தமிழ் and more. The agent reads, checks, matches and routes each one.</div>
       {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
+      <div className="mt-4 flex flex-wrap justify-center gap-2" onClick={(e) => e.stopPropagation()}>
+        <button
+          disabled={busy}
+          onClick={async () => {
+            setBusy(true);
+            setError(null);
+            try {
+              onUploaded(await post("/invoices/demo"));
+            } catch (e) {
+              setError((e as Error).message);
+            } finally {
+              setBusy(false);
+            }
+          }}
+          className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+        >
+          ▶ Load 8 demo invoices
+        </button>
+        <button
+          disabled={busy}
+          onClick={async () => {
+            if (!confirm("Clear all invoices and payments and start the demo fresh?")) return;
+            await post("/demo/reset");
+            location.reload();
+          }}
+          className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+        >
+          Reset demo
+        </button>
+      </div>
+      <div className="mt-2 text-[11px] text-slate-400" onClick={(e) => e.stopPropagation()}>
+        Demo invoices are pre-processed by Sarvam and replayed from cache, so they use no API credits.
+      </div>
     </div>
   );
 }

@@ -28,6 +28,12 @@ class Settings(BaseSettings):
     database_url: str = f"sqlite:///{BASE_DIR / 'ap_agent.db'}"
     upload_dir: Path = BASE_DIR / "uploads"
     fixtures_dir: Path = BASE_DIR / "seed" / "fixtures"
+    samples_dir: Path = BASE_DIR.parent / "sample_invoices"
+    prebuilt_cache: Path = BASE_DIR / "seed" / "sarvam_cache.json"
+
+    # Hosting
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+    cors_origin_regex: str = r"https://.*\.vercel\.app"
 
     # Buyer (our company)
     buyer_name: str = "Acme Retail Pvt Ltd"

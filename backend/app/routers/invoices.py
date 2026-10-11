@@ -28,31 +28,43 @@ def _get(s: Session, invoice_id: int) -> Invoice:
     return inv
 
 
+MAX_FILES_PER_UPLOAD = 10
+
+
+def _create(s: Session, background: BackgroundTasks, filename: str, data: bytes, actor: str = "user") -> dict:
+    name = re.sub(r"[^\w.\-]", "_", filename or "invoice")
+    ext = "." + name.rsplit(".", 1)[-1].lower() if "." in name else ""
+    if ext not in ALLOWED:
+        raise HTTPException(400, f"{filename}: only PDF, PNG and JPG are supported")
+    if len(data) > MAX_BYTES:
+        raise HTTPException(400, f"{filename}: file larger than 20 MB")
+    settings.upload_dir.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(data).hexdigest()
+    path = settings.upload_dir / f"{digest[:12]}__{name}"
+    path.write_bytes(data)
+    inv = Invoice(file_name=filename or name, file_path=str(path), file_hash=digest)
+    s.add(inv)
+    s.commit()
+    s.refresh(inv)
+    pipeline.audit(s, inv.id, "uploaded", actor=actor, file=inv.file_name, sha256=digest)
+    s.commit()
+    pipeline.emit(inv.id, "upload", "done", inv.file_name)
+    background.add_task(pipeline.process_invoice, inv.id)
+    return {"id": inv.id, "file_name": inv.file_name}
+
+
 @router.post("", status_code=201)
 async def upload(files: list[UploadFile], background: BackgroundTasks, s: Session = Depends(get_session)):
-    settings.upload_dir.mkdir(parents=True, exist_ok=True)
-    created = []
-    for f in files:
-        name = re.sub(r"[^\w.\-]", "_", f.filename or "invoice")
-        ext = "." + name.rsplit(".", 1)[-1].lower() if "." in name else ""
-        if ext not in ALLOWED:
-            raise HTTPException(400, f"{f.filename}: only PDF, PNG and JPG are supported")
-        data = await f.read()
-        if len(data) > MAX_BYTES:
-            raise HTTPException(400, f"{f.filename}: file larger than 20 MB")
-        digest = hashlib.sha256(data).hexdigest()
-        path = settings.upload_dir / f"{digest[:12]}__{name}"
-        path.write_bytes(data)
-        inv = Invoice(file_name=f.filename or name, file_path=str(path), file_hash=digest)
-        s.add(inv)
-        s.commit()
-        s.refresh(inv)
-        pipeline.audit(s, inv.id, "uploaded", actor="user", file=inv.file_name, sha256=digest)
-        s.commit()
-        pipeline.emit(inv.id, "upload", "done", inv.file_name)
-        background.add_task(pipeline.process_invoice, inv.id)
-        created.append({"id": inv.id, "file_name": inv.file_name})
-    return created
+    if len(files) > MAX_FILES_PER_UPLOAD:
+        raise HTTPException(400, f"At most {MAX_FILES_PER_UPLOAD} files per upload")
+    return [_create(s, background, f.filename or "invoice", await f.read()) for f in files]
+
+
+@router.post("/demo", status_code=201)
+def load_demo(background: BackgroundTasks, s: Session = Depends(get_session)):
+    """Queue the 8 bundled sample invoices. Their Sarvam results are pre-cached, so this spends no credits."""
+    files = sorted(p for p in settings.samples_dir.iterdir() if p.suffix.lower() in ALLOWED)
+    return [_create(s, background, p.name, p.read_bytes(), actor="demo") for p in files]
 
 
 @router.get("")

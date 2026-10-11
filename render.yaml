@@ -1,0 +1,23 @@
+# Render Blueprint: backend API (FastAPI). Frontend is deployed separately on Vercel.
+services:
+  - type: web
+    name: hisaab-ap-api
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: SARVAM_API_KEY
+        sync: false # entered in the Render dashboard; never committed
+      - key: SARVAM_CHAT_MODEL
+        value: sarvam-105b
+      - key: SARVAM_TOKEN_BUDGET
+        value: "150000"
+      - key: SARVAM_PAGE_BUDGET
+        value: "40"
+      - key: CORS_ORIGINS
+        value: http://localhost:3000

@@ -120,3 +120,14 @@ def pos(s: Session = Depends(get_session)):
 @router.get("/audit")
 def recent_audit(limit: int = 50, s: Session = Depends(get_session)):
     return s.exec(select(AuditEvent).order_by(AuditEvent.id.desc()).limit(limit)).all()
+
+
+@router.post("/demo/reset")
+def reset_demo():
+    """Wipe invoices and reseed the ERP. Sarvam cache and usage are kept, so the budget stays honest."""
+    from app.services.pipeline import PROGRESS
+    from seed import seed_erp
+
+    seed_erp.main()
+    PROGRESS.clear()
+    return {"ok": True}
