@@ -1,5 +1,7 @@
 # Hisaab: Accounts Payable Agent (Idea #24) on Sarvam
 
+Hisaab is an AI accounts payable agent built on Sarvam. You upload invoices as PDFs, scans or phone photos, in English, Hindi, Tamil or other Indian languages. Sarvam Vision reads each document and Sarvam-105B pulls out the details. The agent then checks GST validity, the totals and the tax type, and flags duplicates and changed bank details. It matches every line against the purchase order and the goods receipt. Clean invoices are approved and scheduled for payment automatically. Problem invoices go to a person or are put on hold, with a plain-language explanation and a suggested next step. The AI only reads and explains: every money decision comes from fixed rules, so each one can be explained and appears in the audit trail.
+
 **One flow from start to finish:** drop in an invoice (a PDF, a scan or a phone photo, in English, हिन्दी, தமிழ் and more). The agent then:
 
 1. **reads** it with **Sarvam Vision** (Document Intelligence),
